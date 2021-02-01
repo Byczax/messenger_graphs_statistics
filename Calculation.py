@@ -144,7 +144,7 @@ def main():
     # draw emoji ratio
     draw_plot(convert_to_list(ratio(all_reactions, all_messages)),
               "Stosunek ilości otrzymanych reakcji do napisanych wiadomości przez użytkownika")
-    # draw xd ratio
+    # draw heart ratio
     draw_plot(convert_to_list(ratio(all_hearts, all_messages)),
               "Stosunek ilości otrzymanych serduszek do napisanych wiadomości przez użytkownika")
     # draw xd ratio
