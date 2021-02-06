@@ -1,4 +1,4 @@
-# Counting_messenger
+# Messanger graphs & statistics
 
 ## Description
 
