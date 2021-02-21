@@ -1,4 +1,4 @@
-# Messanger graphs & statistics
+# Messenger graphs & statistics
 
 ## Description
 
