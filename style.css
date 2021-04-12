@@ -1,0 +1,30 @@
+* {
+    font-family: 'Orbitron', sans-serif !important;
+}
+h1 {
+    align-items: center;
+    text-align: center;
+
+}
+
+#container{
+    width: 80%;
+    height: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+select{
+    text-align: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: 'Orbitron', sans-serif;
+}
+option {
+    font-family: 'Orbitron', sans-serif;
+}
+
+.styled-select optgroup {
+    font-family: 'Orbitron', sans-serif;
+}
