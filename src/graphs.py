@@ -1,6 +1,4 @@
 from matplotlib import pyplot as plt
-import matplotlib
-import mplcairo
 
 
 def draw_plot(data: list[str], plot_name: str, save: bool = False):

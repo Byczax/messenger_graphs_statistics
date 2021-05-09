@@ -1,5 +1,9 @@
 # Messenger graphs & statistics
-Code created in Python 3.9
+
+![Version](https://img.shields.io/badge/python-3.9-blue)
+![GitHub issues](https://img.shields.io/github/issues/Byczax/messenger_graphs_statistics)
+![GitHub Repo stars](https://img.shields.io/github/stars/Byczax/messenger_graphs_statistics?style=social)
+
 ## Description
 
 This code is used with data downloaded from facebook to generate statistics in form of graphs.
@@ -24,3 +28,4 @@ Change parameters in main.py file for your needs
 run file main.py and get your graphs :smile:
 
 (if you want to save graphs in `.png` format, change parameter in `main.py` file to *True*)
+

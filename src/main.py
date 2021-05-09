@@ -1,43 +1,12 @@
 import parameters
-import datetime as datetime
+
 import time
 import os
-import json
+
+from src.essentials import convert_to_list
 from src.graphs import draw_plot
 from src import calculate as cal
-
-
-# read facebook files and convert to json
-def read_json(filename: str) -> json:
-    with open(filename) as file:
-        data = json.load(file)
-        return data
-
-
-# change given "normal" date to unix value
-def date_to_unix(date_values: list[int]):
-    return int(time.mktime(datetime.datetime(date_values[0], date_values[1], date_values[2], 0, 0).timetuple()) * 1000)
-
-
-# convert dictionaries to list for better data reading for graphs
-def convert_to_list(data: json) -> list:
-    my_return = list(data.items())
-    my_return.sort(key=lambda my_tuple: my_tuple[1])
-    return my_return
-
-
-# export results to .csv file
-def export_to_csv(messages, filename: str):
-    with open(filename, 'w', encoding="utf-8") as my_file:
-        my_file.write("Username" + ";" + "messages" + "\n")
-        for output in messages:
-            my_file.write(output[0] + ";" + str(output[1]) + "\n")
-
-
-# display dictionary
-def printing_dict(messages: dict):
-    for user in messages:
-        print(user)
+from src import essentials
 
 
 # main function
@@ -47,10 +16,10 @@ def main():
     for file in os.listdir():
         my_files_name.append(file)
 
-    start_date = date_to_unix(values.start_date_values)
-    end_date = date_to_unix(values.end_date_values)
+    start_date = essentials.date_to_unix(values.start_date_values)
+    end_date = essentials.date_to_unix(values.end_date_values)
 
-    my_json = list(map(read_json, my_files_name))
+    my_json = list(map(essentials.read_json, my_files_name))
     print(time.ctime(cal.find_the_oldest(my_json) / 1000))
 
     # all messages
@@ -66,7 +35,7 @@ def main():
 
     all_emoji = cal.emoji_count(my_json, start_date, end_date)
 
-    printing_dict(all_emoji)
+    essentials.printing_dict(all_emoji)
     draw_plot(convert_to_list(all_emoji), "ilość danych emoji")
     # draw all messages plot
     draw_plot(convert_to_list(all_messages), "Ilość wiadomości wysłanych przez osoby")
@@ -92,6 +61,6 @@ def main():
 # ACTIVATE!
 if __name__ == "__main__":
     # IMPORTANT, WRITE YOUR PARAMETERS
-    # (<dircetory with messages>, <start date>, <end date>, <Word that you want to find>, <Save graphs>
+    # (<directory with messages>, <start date>, <end date>, <Word that you want to find>, <Save graphs>
     values = parameters.Parameters("fixed_messages", [2018, 1, 1], [2022, 3, 1], "xD", False)
     main()

@@ -76,12 +76,14 @@ def giving_reactions(my_files: list, start_date: int, end_date: int) -> dict:
     my_messages = {}
     for my_file in my_files:
         for message in my_file["messages"]:
+
             if "reactions" in message:
                 for reaction in message["reactions"]:
                     if end_date >= message["timestamp_ms"] >= start_date:
                         if reaction["actor"] not in my_messages:
                             my_messages[reaction["actor"]] = 0
                         my_messages[reaction["actor"]] += 1
+
     return my_messages
 
 
