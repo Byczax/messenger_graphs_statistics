@@ -29,3 +29,13 @@ run file main.py and get your graphs :smile:
 
 (if you want to save graphs in `.png` format, change parameter in `main.py` file to *True*)
 
+### 4.Available data
+
+Right now i created modules for:
+
+1. All sended messages
+2. All reactions given to others
+3. All received reactions
+4. Counting specific reaction
+5. Counting specific word
+6. Counting all emoji used in conversation
