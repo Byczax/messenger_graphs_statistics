@@ -39,3 +39,11 @@ Right now i created modules for:
 4. Counting specific reaction
 5. Counting specific word
 6. Counting all emoji used in conversation
+
+### TODO
+
+- Count sended images, gifs
+- Count sended files
+- deleted messages
+- Count sended links to websites
+- Added and removed members
