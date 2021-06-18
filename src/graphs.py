@@ -1,9 +1,8 @@
 from matplotlib import pyplot as plt
 
 
-def draw_plot(data: list[str], plot_name: str, save: bool = False):
-    plt.rcParams.update(
-        {'font.size': 8, 'font.family': 'symbola'})
+def draw_plot(data: list[str], plot_name: str, save: bool):
+    plt.rcParams.update({'font.size': 8})
     plt.figure(num=None, figsize=(20, 8), dpi=400, facecolor='w', edgecolor='k')
     plt.subplots_adjust(left=0.03, right=0.99, top=0.96, bottom=0.18)
     plt.bar(list(map(lambda my_tuple: my_tuple[0], data)),
@@ -13,5 +12,6 @@ def draw_plot(data: list[str], plot_name: str, save: bool = False):
     plt.xticks(rotation=90)
     plt.title(plot_name)
     if save:
-        plt.savefig("img/" + plot_name + ".png")
-    plt.show()
+        plt.savefig("../img/" + plot_name.replace(" ", "-") + ".svg")
+    else:
+        plt.show()
