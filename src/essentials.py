@@ -1,7 +1,7 @@
 import json
 import datetime as datetime
 import time
-
+from typing import List
 
 # read facebook files and convert to json
 def read_json(filename: str) -> json:
@@ -11,7 +11,7 @@ def read_json(filename: str) -> json:
 
 
 # change given "normal" date to unix value
-def date_to_unix(date_values: list[int]):
+def date_to_unix(date_values: List[int]):
     return int(time.mktime(datetime.datetime(date_values[0], date_values[1], date_values[2], 0, 0).timetuple()) * 1000)
 
 
