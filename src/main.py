@@ -58,7 +58,6 @@ def stat_call(my_json: list, start_date: int, end_date: int):
 
 # main function
 def main():
-    print(values.messages_directory)
     my_files_name = []
     # my_files_name = [file for file in os.listdir("../" + values.messages_directory)]
     os.chdir(values.messages_directory)
@@ -78,8 +77,7 @@ def main():
 def read_args():
     if len(sys.argv) < 5 or sys.argv[1][0] == '-':
         print("Usage:" + sys.argv[
-            0] + " <file(s) path> <start date([yyyy, mm, dd])> <end date([yyyy, mm, dd])> <word to find> <save image("
-                 "s)>")
+            0] + " <file(s) path> <start date([yyyy, mm, dd])> <end date([yyyy, mm, dd])> <word to find> <save image(boolean: True|False)> <save path>")
     else:
         files = sys.argv[1]
         start_date = [int(i) for i in sys.argv[2][1:-1].split(",")]
@@ -87,6 +85,7 @@ def read_args():
         word = sys.argv[4]
         save = bool(sys.argv[5])
         path = sys.argv[6]
+        print(path)
         return parameters.Parameters(files, start_date, end_date, word, save, path)
 
 
