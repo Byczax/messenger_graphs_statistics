@@ -15,8 +15,8 @@ def draw_plot(data: List[str], plot_name: str, save: bool, number: int, path: st
     plt.bar(list(map(lambda my_tuple: my_tuple[0], data)),
             list(map(lambda my_tuple: my_tuple[1], data)))
     for caption in data:
-        plt.text(caption[0], caption[1], caption[1], va='bottom', ha='center')
-    # plt.xticks(rotation=90, position='bottom')
+        plt.text(caption[0], caption[1], caption[1],rotation=90, va='bottom', ha='center')
+    plt.xticks(rotation=90)
     plt.title(plot_name)
     if save:
         # os.mkdir("../images/")
