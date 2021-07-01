@@ -87,6 +87,19 @@ def giving_reactions(my_files: list, start_date: int, end_date: int) -> dict:
     return my_messages
 
 
+def find_only_exact_same(my_files: list, start_date: int, end_date: int, word: string) -> dict:
+    my_words = {}
+    for my_file in my_files:
+        for message in my_file["messages"]:
+            if "content" in message:
+                if message["content"] == word:
+                    if end_date >= message["timestamp_ms"] >= start_date:
+                        if message["sender_name"] not in my_words:
+                            my_words[message["sender_name"]] = 0
+                        my_words[message["sender_name"]] += 1
+    return my_words
+
+
 # calculate radio for given parameters
 def ratio(all_keys: dict, my_messages: dict) -> dict:
     my_ratio = {}
