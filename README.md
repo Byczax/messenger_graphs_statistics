@@ -23,11 +23,19 @@ Download conversation data from [**here**](https://www.facebook.com/dyi/?referre
 
 ### 3.Creating data
 
-Change parameters in main.py file for your needs
+1. Process fixed file(s) with `src/main.py` in console.
+(write `src/main.py` without argument for help)
 
-run file main.py and get your graphs :smile:
+2. Good work! now you have stats for your messenger conversations.
 
-(if you want to save graphs in `.png` format, change parameter in `main.py` file to *True*)
+### Automating generation
+
+If you have more files, more groups that you want to get statistics, then:
+
+1. Create folder *messages* and inside create **1 folder** for your group files
+2. Run script `fix_stupid_files.sh`
+3. Run script `generate_all.sh`
+4. voilà, now you have folder `img` with all your charts with stats.
 
 ### 4.Available data
 
@@ -44,6 +52,6 @@ Right now i created modules for:
 
 - Count sended images, gifs
 - Count sended files
-- deleted messages
+- Count deleted messages
 - Count sended links to websites
-- Added and removed members
+- Count Added and **removed** members
