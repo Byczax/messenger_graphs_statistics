@@ -13,7 +13,7 @@ for folder in ./fixed_messages/*;do
     number=1
     mkdir -p "img/${folder##*/}/all/"
     python3 "./src/main.py" $folder "[2000,01,01]" "[2222,01,01]" "xD" "True" "../img/${folder##*/}/all/"
-    for date in 20{19,20,21},{03,10},01;do
+    for date in 20{18,19,20,21},{03,10},01;do
         previous=$current
         current=$next
         next=$date
