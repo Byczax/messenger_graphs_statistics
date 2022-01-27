@@ -10,3 +10,9 @@ class Parameters:
     find_word: string
     save_graphs: bool
     path: str
+
+@dataclass 
+class Filepart:
+    file: list
+    start_date: int
+    end_date: int
