@@ -1,4 +1,5 @@
-import parameters
+import ast
+from parameters import *
 
 import time
 import os
@@ -10,68 +11,83 @@ import calculate as cal
 import essentials
 
 
-def stat_call(my_json: list, start_date: int, end_date: int):
+def stat_call(data_range: Filepart):
     # all messages
-    all_messages = cal.message_count(my_json, start_date, end_date)
+    all_messages = cal.message_count(data_range)
     # all reactions
-    all_reactions = cal.emoji_all_count(my_json, start_date, end_date)
+    all_reactions = cal.emoji_all_count(data_range)
     # all hearts
-    all_hearts = cal.emoji_heart_count(my_json, start_date, end_date)
+    all_hearts = cal.emoji_heart_count(data_range)
     # all given reactions
-    all_given = cal.giving_reactions(my_json, start_date, end_date)
+    all_given = cal.giving_reactions(data_range)
     # all xD
-    all_words = cal.find_word(my_json, start_date, end_date, values.find_word)
-
+    all_words = cal.find_word(data_range, values.find_word)
+    # all gifs, photos
+    multimedia = cal.multimedia(data_range)
     # all_emoji = cal.emoji_count(my_json, start_date, end_date)
 
-    # # essentials.printing_dict(all_emoji)
-    # draw_plot(convert_to_list(all_emoji), "ilość danych emoji", values.save_graphs, 0)
-
     # draw all messages plot
-    draw_plot(convert_to_list(all_messages), "Ilość wiadomości wysłanych przez osoby", values.save_graphs, 1,
-              values.path)
+    draw_plot(convert_to_list(all_messages), "Liczba wiadomości wysłanych przez osoby",
+              values.save_graphs, values.path, 1)
     # draw all emoji plot
-    draw_plot(convert_to_list(all_reactions), "Ilość otrzymanych reakcji pod swoimi wiadomościami", values.save_graphs,
-              2, values.path)
+    draw_plot(convert_to_list(all_reactions), "Liczba otrzymanych reakcji pod swoimi wiadomościami",
+              values.save_graphs, values.path, 2)
     # draw all xd plot
-    draw_plot(convert_to_list(all_words), "Ilość napisanych '" + values.find_word + "' na konwersacji",
-              values.save_graphs, 3, values.path)
+    draw_plot(convert_to_list(all_words), "Liczba napisanych '" + values.find_word +
+              "' na konwersacji", values.save_graphs, values.path, 3)
     # draw all hearts plot
-    draw_plot(convert_to_list(all_hearts), "Ilość otrzymanych serduszek pod wiadomościami na konwersacji",
-              values.save_graphs, 4, values.path)
+    draw_plot(convert_to_list(all_hearts), "Liczba otrzymanych serduszek pod wiadomościami na konwersacji",
+              values.save_graphs, values.path, 4)
     # draw given reactions
-    draw_plot(convert_to_list(all_given), "Ilość dawanych reakcji pod wiadomościami", values.save_graphs, 5,
-              values.path)
+    draw_plot(convert_to_list(all_given), "Liczba dawanych reakcji pod wiadomościami",
+              values.save_graphs, values.path, 5)
     # draw emoji ratio
     draw_plot(convert_to_list(cal.ratio(all_reactions, all_messages)),
-              "Stosunek ilości otrzymanych reakcji do napisanych wiadomości przez użytkownika", values.save_graphs, 6,
-              values.path)
+              "Stosunek ilości otrzymanych reakcji do napisanych wiadomości przez użytkownika", values.save_graphs, values.path, 6)
     # draw heart ratio
     draw_plot(convert_to_list(cal.ratio(all_hearts, all_messages)),
-              "Stosunek ilości otrzymanych serduszek do napisanych wiadomości przez użytkownika", values.save_graphs, 7,
-              values.path)
+              "Stosunek ilości otrzymanych serduszek do napisanych wiadomości przez użytkownika", values.save_graphs, values.path, 7)
     # draw xd ratio
     draw_plot(convert_to_list(cal.ratio(all_words, all_messages)),
-              "Stosunek ilości napisanych '" + values.find_word + "' do napisanych wiadomości przez użytkownika",
-              values.save_graphs, 8, values.path)
+              "Stosunek ilości napisanych '" + values.find_word +
+              "' do napisanych wiadomości przez użytkownika",
+              values.save_graphs, values.path, 8)
 
 
 # main function
 def main():
+    # * Get data from files
     my_files_name = []
-    # my_files_name = [file for file in os.listdir("../" + values.messages_directory)]
     os.chdir(values.messages_directory)
     for file in os.listdir():
-        my_files_name.append(file)
+        if file.endswith(".json"):
+            my_files_name.append(file)
     my_json = list(map(essentials.read_json, my_files_name))
-    os.chdir("..")
-    # os.chdir("..")
+    os.chdir("..")  # Exit from folder with messages
+
+    # * Remove duplicates
+    users = set()
+    messages = set()
+    for file in my_json:
+        for message in file["messages"]:
+            messages.add(str(message))
+    for user in file["participants"]:
+        users.add(str(user))
+    new_json = {}
+    new_json["messages"] = [ast.literal_eval(message) for message in messages]
+    new_json["users"] = [ast.literal_eval(user) for user in users]
+
+    # Convert given dates to unix
     start_date = essentials.date_to_unix(values.start_date_values)
     end_date = essentials.date_to_unix(values.end_date_values)
 
-    
-    print(time.ctime(cal.find_the_oldest(my_json) / 1000))
-    stat_call(my_json, start_date, end_date)
+    # print()
+    print(sys.argv[1], time.ctime(cal.find_time(
+        new_json) / 1000), len(new_json["messages"]), sep=" | ")
+    # print(sys.argv[1], time.ctime(cal.find_time(
+    #     new_json) / 1000, max), len(new_json["messages"]), sep=" | ")
+    data_range = Filepart(new_json, start_date, end_date)
+    stat_call(data_range)
 
 
 def read_args():
@@ -86,7 +102,7 @@ def read_args():
         save = bool(sys.argv[5])
         path = sys.argv[6]
         print(path)
-        return parameters.Parameters(files, start_date, end_date, word, save, path)
+        return Parameters(files, start_date, end_date, word, save, path)
 
 
 # ACTIVATE!
@@ -95,7 +111,6 @@ if __name__ == "__main__":
     # IMPORTANT, WRITE YOUR PARAMETERS
     # (<directory with messages>, <start date>, <end date>, <Word that you want to find>, <Save graphs>
     # values = parameters.Parameters("fixed_messages", [2017, 10, 1], [2022, 3, 1], "xD", False)  # all
-    # values = parameters.Parameters("./fixed_messages/2019", [2020, 10, 1], [2021, 2, 28], "xD", True, "../img/samorzad/zima-2020/")  # 1 semestr 2018
     # values = parameters.Parameters("fixed_messages", [2019, 10, 1], [2020, 2, 28], "xD", True)  # 3 semestr 2018
     # values = parameters.Parameters("fixed_messages", [2020, 10, 1], [2021, 2, 28], "xD", True)  # 5 semestr 2018
     # values = parameters.Parameters("fixed_messages", [2019, 3, 1], [2019, 7, 1], "xD", True)  # 2 semestr 2018
