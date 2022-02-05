@@ -32,10 +32,21 @@ Download conversation data from [**here**](https://www.facebook.com/dyi/?referre
 
 If you have more files, more groups that you want to get statistics, then:
 
-1. Create folder *messages* and inside create **1 folder** for your group files
+1. Create folder *messages* and inside create **1 folder** for each of your group files
 2. Run script `fix_stupid_files.sh`
 3. Run script `generate_all.sh`
 4. voilà, now you have folder `img` with all your charts with stats.
+
+Example file structure
+
+```bash
+.
+└── messages
+     ├── group1
+     ├── group2 
+     ├── group3
+     └── group4 
+```
 
 ### 4.Available data
 
