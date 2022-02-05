@@ -22,8 +22,6 @@ def stat_call(data_range: Filepart):
     all_given = cal.giving_reactions(data_range)
     # all xD
     all_words = cal.find_word(data_range, values.find_word)
-    # all gifs, photos
-    multimedia = cal.multimedia(data_range)
     # all_emoji = cal.emoji_count(my_json, start_date, end_date)
 
     # draw all messages plot
