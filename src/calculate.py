@@ -63,8 +63,7 @@ def find_word(data: Filepart, word: str) -> dict:
             continue
         if "content" not in message:
             continue
-        word_count = message["content"].lower().count(word.lower())
-        words[message["sender_name"]] += word_count
+        words[message["sender_name"]] += message["content"].lower().count(word.lower())
     return words
 
 
@@ -101,6 +100,20 @@ def ratio(all_keys: dict, messages: dict) -> dict:
         if messages[name] and messages[name] >= 100:
             ratio[name] = round(all_keys[name] * mul / messages[name]) / mul
     return ratio
+
+
+def multimedia(data: Filepart) -> dict:
+    messages = defaultdict(int)
+    for message in data.file["messages"]:
+        if not (data.end_date >= message["timestamp_ms"] >= data.start_date):
+            continue
+
+        if any(["photos" in message,
+               "gifs" in message,
+                "videos" in message,
+                "files" in message]):
+            messages[message["sender_name"]] += 1
+    return messages
 
 
 # message time in files

@@ -1,7 +1,10 @@
+from datetime import datetime
 import matplotlib.pyplot as plt
 from typing import List
 
 # old vertical plot
+
+
 def draw_plot_2(data: List[str], plot_name: str, save: bool, number: int, path: str):
     plt.rcParams.update({'font.size': 8})
     plt.figure(num=None, figsize=(20, 8), dpi=400,
@@ -23,7 +26,7 @@ def draw_plot_2(data: List[str], plot_name: str, save: bool, number: int, path: 
 
 # horizontal plot
 def draw_plot(data: List[str], plot_name: str, save: bool, path: str, number: int):
-    fig, ax = plt.subplots(figsize=(10, 30), facecolor='w', edgecolor='k')
+    _, ax = plt.subplots(figsize=(10, 30), facecolor='w', edgecolor='k')
     ax.barh(
         list(map(lambda my_tuple: my_tuple[0], data)),
         list(map(lambda my_tuple: my_tuple[1], data))
@@ -52,9 +55,10 @@ def draw_plot(data: List[str], plot_name: str, save: bool, path: str, number: in
     # fig.text(0.9, 0.15, 'Byczax - stats', fontsize=12,
     #          color='grey', ha='right', va='bottom',
     #          alpha=0.7)
-
+    # -{date.today()} <- maybe add later for filename
+    timestamp = str(datetime.now().time()).split(".")[0].replace(":","")[:-2]
     if save:
         plt.savefig(
-            f'{path}{str(number)}-{plot_name.replace(" ", "-")}.svg', bbox_inches='tight')
+            f'{path}{str(number)}{timestamp}-{plot_name.replace(" ", "-")}.svg', bbox_inches='tight')
     else:
         plt.show()
