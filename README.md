@@ -14,12 +14,15 @@ This code is used with data downloaded from facebook to generate statistics in f
 
 Download conversation data from [**here**](https://www.facebook.com/dyi/?referrer=yfi_settings).
 
+Data format needs to be in **JSON**.
+For smaller file (and faster request process) select **low quality** media if you don't want media from groups for personal use (photos, videos).
+
 ### 2.Conversion
 
 1. Process this file(s) with `fix_stupid_facebook_unicode_encoding.py` in console.
 (write `fix_stupid_facebook_unicode_encoding.py` without argument for help)
 
-2. Insert all generated files into **1 folder** in the same directory as folder `src`. (name folder as you like and write it's name in `main.py`)
+1. Insert all generated files into **1 folder** in the same directory as folder `src`. (name folder as you like and write it's name in `main.py`)
 
 ### 3.Creating data
 
@@ -30,7 +33,7 @@ Download conversation data from [**here**](https://www.facebook.com/dyi/?referre
 
 ### Automating generation
 
-If you have more files, more groups that you want to get statistics, then:
+If you have more groups that you want to get statistics, then:
 
 1. Create folder *messages* and inside create **1 folder** for each of your group files
 2. Run script `fix_stupid_files.sh`
@@ -66,3 +69,43 @@ Right now i created modules for:
 - Count deleted messages
 - Count sended links to websites
 - Count Added and **removed** members
+
+### Facebook stupid file documentation [WIP]
+
+**Message file construction:**
+
+- participants
+  - name
+- messages
+  - sender_name
+  - timestamp_ms
+  - type
+  - is_unsent
+
+**Message types:**
+
+- Call
+  - call duration
+- Generic
+  - photos
+    - uri
+    - creation_timestamp
+  - videos
+    - uri
+    - creation_timestamp
+    - thumbnail
+      - uri
+  - gifs
+  - reactions
+    - reaction
+    - actor
+- Share
+- Subscribe
+  - Users
+    - name
+- Unsubscribe
+
+"Weird things":
+
+- Pinging is in Generic (@someone)
+- when someone join call then it's Generic (someone joined video chat)
