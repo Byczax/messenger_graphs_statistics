@@ -1,4 +1,5 @@
 import ast
+from inspect import signature
 from parameters import *
 
 import time
@@ -9,47 +10,55 @@ from essentials import convert_to_list
 from graphs import draw_plot
 import calculate as cal
 import essentials
+import counters as count
 
 
 def stat_call(data_range: Filepart):
+
+    smaller_functions = [(cal.emoji_all_count,
+                          "Liczba otrzymanych reakcji pod swoimi wiadomościami",
+                          "Stosunek otrzymanych reakcji do napisanych wiadomości przez użytkownika"),  # emoji count
+                         (cal.emoji_heart_count,
+                          "Liczba otrzymanych serduszek pod wiadomościami na konwersacji",
+                          "Stosunek otrzymanych serduszek do napisanych wiadomości przez użytkownika"),  # heart count
+                         (cal.giving_reactions,
+                          "Liczba dawanych reakcji pod wiadomościami",
+                          "Stosunek dawanych reakcji do napisanych wiadomości przez użytkownika"),  # giving reactions
+                         (cal.find_word,
+                          "Stosunek napisanych '" + values.find_word + \
+                          "' do napisanych wiadomości przez użytkownika",
+                          "Stosunek napisanych '" + values.find_word + "' do napisanych wiadomości przez użytkownika")]  # word count
+
     # all messages
     all_messages = cal.message_count(data_range)
-    # all reactions
-    all_reactions = cal.emoji_all_count(data_range)
-    # all hearts
-    all_hearts = cal.emoji_heart_count(data_range)
-    # all given reactions
-    all_given = cal.giving_reactions(data_range)
-    # all xD
-    all_words = cal.find_word(data_range, values.find_word)
-    # all_emoji = cal.emoji_count(my_json, start_date, end_date)
 
     # draw all messages plot
     draw_plot(convert_to_list(all_messages), "Liczba wiadomości wysłanych przez osoby",
               values.save_graphs, values.path, 1)
-    # draw all emoji plot
-    draw_plot(convert_to_list(all_reactions), "Liczba otrzymanych reakcji pod swoimi wiadomościami",
-              values.save_graphs, values.path, 2)
-    # draw all xd plot
-    draw_plot(convert_to_list(all_words), "Liczba napisanych '" + values.find_word +
-              "' na konwersacji", values.save_graphs, values.path, 3)
-    # draw all hearts plot
-    draw_plot(convert_to_list(all_hearts), "Liczba otrzymanych serduszek pod wiadomościami na konwersacji",
-              values.save_graphs, values.path, 4)
-    # draw given reactions
-    draw_plot(convert_to_list(all_given), "Liczba dawanych reakcji pod wiadomościami",
-              values.save_graphs, values.path, 5)
-    # draw emoji ratio
-    draw_plot(convert_to_list(cal.ratio(all_reactions, all_messages)),
-              "Stosunek ilości otrzymanych reakcji do napisanych wiadomości przez użytkownika", values.save_graphs, values.path, 6)
-    # draw heart ratio
-    draw_plot(convert_to_list(cal.ratio(all_hearts, all_messages)),
-              "Stosunek ilości otrzymanych serduszek do napisanych wiadomości przez użytkownika", values.save_graphs, values.path, 7)
-    # draw xd ratio
-    draw_plot(convert_to_list(cal.ratio(all_words, all_messages)),
-              "Stosunek ilości napisanych '" + values.find_word +
-              "' do napisanych wiadomości przez użytkownika",
-              values.save_graphs, values.path, 8)
+
+    for count, function in zip(range(2, len(smaller_functions)+2), smaller_functions):
+        calculate_and_draw(function[0], data_range,
+                           function[1], count, all_messages, function[2], len(smaller_functions))
+
+
+def calculate_and_draw(function, data_range, title, number, all_messages, ratio_title, function_count):
+    # calculate
+    if len(signature(function).parameters) > 1:
+        result = function(data_range, values.find_word)
+    else:
+        result = function(data_range)
+
+    draw_plot(convert_to_list(result), title,
+              values.save_graphs, values.path, number)
+    draw_plot(convert_to_list(cal.ratio(result, all_messages)),
+              ratio_title, values.save_graphs, values.path, number+function_count)
+
+
+def count_call(data_range: Filepart):
+    count.print_keys(data_range)
+    # words = count.count_words(data_range)
+    # words = essentials.remove_small(words, 1000)
+    # draw_plot(convert_to_list(words), "Liczba napisanych słów",values.save_graphs, values.path,0)
 
 
 # main function
@@ -80,12 +89,11 @@ def main():
     end_date = essentials.date_to_unix(values.end_date_values)
 
     # print()
-    print(sys.argv[1], time.ctime(cal.find_time(
-        new_json) / 1000), len(new_json["messages"]), sep=" | ")
-    # print(sys.argv[1], time.ctime(cal.find_time(
-    #     new_json) / 1000, max), len(new_json["messages"]), sep=" | ")
+    print(sys.argv[1], time.ctime(cal.find_time(new_json) / 1000), len(new_json["messages"]), sep=" | ")
+    # print(sys.argv[1], time.ctime(cal.find_time(new_json) / 1000, max), len(new_json["messages"]), sep=" | ")
     data_range = Filepart(new_json, start_date, end_date)
     stat_call(data_range)
+    # count_call(data_range)
 
 
 def read_args():
@@ -106,12 +114,4 @@ def read_args():
 # ACTIVATE!
 if __name__ == "__main__":
     values = read_args()
-    # IMPORTANT, WRITE YOUR PARAMETERS
-    # (<directory with messages>, <start date>, <end date>, <Word that you want to find>, <Save graphs>
-    # values = parameters.Parameters("fixed_messages", [2017, 10, 1], [2022, 3, 1], "xD", False)  # all
-    # values = parameters.Parameters("fixed_messages", [2019, 10, 1], [2020, 2, 28], "xD", True)  # 3 semestr 2018
-    # values = parameters.Parameters("fixed_messages", [2020, 10, 1], [2021, 2, 28], "xD", True)  # 5 semestr 2018
-    # values = parameters.Parameters("fixed_messages", [2019, 3, 1], [2019, 7, 1], "xD", True)  # 2 semestr 2018
-    # values = parameters.Parameters("fixed_messages", [2020, 3, 1], [2020, 7, 1], "xD", True)  # 4 semestr 2018
-    # values = parameters.Parameters("fixed_messages", [2021, 3, 1], [2021, 7, 1], "xD", True)  # 6 semestr 2018
     main()

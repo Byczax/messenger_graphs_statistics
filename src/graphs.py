@@ -59,6 +59,6 @@ def draw_plot(data: List[str], plot_name: str, save: bool, path: str, number: in
     timestamp = str(datetime.now().time()).split(".")[0].replace(":","")[:-2]
     if save:
         plt.savefig(
-            f'{path}{str(number)}{timestamp}-{plot_name.replace(" ", "-")}.svg', bbox_inches='tight')
+            f'{path}{str(10+number)}{timestamp}-{plot_name.replace(" ", "-")}.svg', bbox_inches='tight')
     else:
         plt.show()

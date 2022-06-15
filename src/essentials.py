@@ -34,3 +34,11 @@ def export_to_csv(messages, filename: str):
 def printing_dict(messages: dict):
     for user in messages:
         print(user)
+
+def remove_small(messages: dict, count):
+    new_messages = {}
+    for message in messages:
+        if messages[message] > 100 and len(message) >= 5:
+            # print(f"{message} | {messages[message]}")
+            new_messages[message] = messages[message]
+    return new_messages
