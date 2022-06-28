@@ -3,6 +3,7 @@ import datetime as datetime
 import time
 from typing import List
 
+
 # read facebook files and convert to json
 def read_json(filename: str) -> json:
     with open(filename) as file:
@@ -22,6 +23,12 @@ def convert_to_list(data: json) -> list:
     return my_return
 
 
+def convert_to_list_nested(data: json) -> list:
+    my_return = list(data.items())
+    my_return.sort(key=lambda my_tuple: sum(my_tuple[1].values()))
+    return my_return
+
+
 # export results to .csv file
 def export_to_csv(messages, filename: str):
     with open(filename, 'w', encoding="utf-8") as my_file:
@@ -34,6 +41,7 @@ def export_to_csv(messages, filename: str):
 def printing_dict(messages: dict):
     for user in messages:
         print(user)
+
 
 def remove_small(messages: dict, count):
     new_messages = {}

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+rm -rf img
 mkdir -p img
 # iterate every folder in messages
 for folder in ./fixed_messages/*;do

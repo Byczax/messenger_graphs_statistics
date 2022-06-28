@@ -1,7 +1,6 @@
 from datetime import datetime
 import matplotlib.pyplot as plt
 from typing import List
-
 # old vertical plot
 
 
@@ -56,7 +55,69 @@ def draw_plot(data: List[str], plot_name: str, save: bool, path: str, number: in
     #          color='grey', ha='right', va='bottom',
     #          alpha=0.7)
     # -{date.today()} <- maybe add later for filename
-    timestamp = str(datetime.now().time()).split(".")[0].replace(":","")[:-2]
+    timestamp = str(datetime.now().time()).split(".")[0].replace(":", "")[:-2]
+    if save:
+        plt.savefig(
+            f'{path}{str(10+number)}{timestamp}-{plot_name.replace(" ", "-")}.svg', bbox_inches='tight')
+    else:
+        plt.show()
+
+
+def draw_combined_plot(data, plot_name: str, save: bool, path: str, number: int):
+    # media dataset
+    human = []
+    photos = []
+    videos = []
+    gifs = []
+    files = []
+    summary = []
+
+    # transform data to lists
+    for registry in data:
+        human.append(registry[0])
+        photos.append(registry[1]["photos"])
+        videos.append(registry[1]["videos"])
+        gifs.append(registry[1]["gifs"])
+        files.append(registry[1]["files"])
+        summary.append(registry[1]["files"] + registry[1]
+                       ["photos"] + registry[1]["videos"] + registry[1]["gifs"])
+
+    _, ax = plt.subplots(figsize=(10, 30), facecolor='w', edgecolor='k')
+
+    plt.margins(0)
+
+    for s in ['top', 'bottom', 'left', 'right']:
+        ax.spines[s].set_visible(False)
+
+    # Remove x, y Ticks
+    ax.xaxis.set_ticks_position('none')
+    ax.yaxis.set_ticks_position('none')
+
+    # Add x, y grid lines
+    ax.grid(b=True, color='grey',
+            linestyle='-.', linewidth=0.5,
+            alpha=0.2)
+
+    # Add annotation to bars
+    ax.barh(human, summary, color="black")
+    for i in ax.patches:
+        plt.text(i.get_width(), i.get_y()+0.3,
+                 str(round((i.get_width()), 2)),
+                 fontsize=8, fontweight='bold',
+                 color='grey')
+
+    # Add media types into legend and chart
+    ax.barh(human, photos, label="photos")
+    left = photos
+    ax.barh(human, videos, label="videos", left=left)
+    left = [x + y for (x, y) in zip(left, videos)]
+    ax.barh(human, gifs,   label="gifs",  left=left)
+    left = [x + y for (x, y) in zip(left, gifs)]
+    ax.barh(human, files,  label="files",   left=left)
+
+    plt.legend(loc='lower right')
+
+    timestamp = str(datetime.now().time()).split(".")[0].replace(":", "")[:-2]
     if save:
         plt.savefig(
             f'{path}{str(10+number)}{timestamp}-{plot_name.replace(" ", "-")}.svg', bbox_inches='tight')
