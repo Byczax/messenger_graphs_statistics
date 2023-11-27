@@ -2,6 +2,7 @@ import string
 from dataclasses import dataclass
 from typing import List
 
+
 @dataclass
 class Parameters:
     messages_directory: string
@@ -11,7 +12,8 @@ class Parameters:
     save_graphs: bool
     path: str
 
-@dataclass 
+
+@dataclass
 class Filepart:
     file: list
     start_date: int

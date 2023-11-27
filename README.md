@@ -64,8 +64,6 @@ Right now i created modules for:
 
 ### TODO
 
-- Count sended images, gifs
-- Count sended files
 - Count deleted messages
 - Count sended links to websites
 - Count Added and **removed** members
